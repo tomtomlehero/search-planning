@@ -9,22 +9,30 @@ import fr.mla.searchplanning.Tree.Node;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class Main {
+public class TreeSearch {
 
   public static void main(String[] args) {
 
-    Problem problem = new EightPuzzleProblem(3, 1, 2, 4, 7, 0, 6, 8, 5);
+    Problem problem = new EightPuzzleProblem(1, 0, 2, 3, 4, 5, 6, 7, 8);
 
     try {
-      State goal = treeSearch(problem);
-      log.info("Found ;-) {}", goal);
+      Node<State> goal = doSearch(problem);
+
+      Node<State> n = goal;
+      int i = 0;
+      log.info("Found ;-)");
+      while (n != null) {
+        log.info("{} {}", i++, n);
+        n = n.getParent();
+      }
+
     } catch (NoSolutionException e) {
       log.error("No solution found :-(");
     }
   }
 
 
-  private static State treeSearch(Problem problem) throws NoSolutionException {
+  private static Node<State> doSearch(Problem problem) throws NoSolutionException {
 
     State initialState = problem.getInitialState();
     Tree<State> searchTree = new Tree<>(initialState);
@@ -39,7 +47,7 @@ public class Main {
 
       Node<State> node = fringe.poll();
       if (problem.isTerminal(node.getValue())) {
-        return node.getValue();
+        return node;
       }
 
       if (closedSet.contains(node.getValue())) {
