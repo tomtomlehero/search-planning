@@ -47,8 +47,7 @@ public class Main {
       }
       closedSet.add(node.getValue());
 
-      List<Node<State>> successors = problem.getSuccessors(node.getValue())
-          .stream().map(Node::new).toList();
+      List<Node<State>> successors = node.getValue().getSuccessors().stream().map(Node::new).toList();
 
       node.addChildren(successors);
       fringe.addAll(successors);

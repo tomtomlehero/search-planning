@@ -1,7 +1,5 @@
 package fr.mla.searchplanning;
 
-import java.util.List;
-
 import lombok.Getter;
 
 public class EightPuzzleProblem implements Problem {
@@ -13,11 +11,6 @@ public class EightPuzzleProblem implements Problem {
 
   public EightPuzzleProblem(Integer... i) {
     initialState = new EightPuzzleState(i);
-  }
-
-  @Override
-  public List<State> getSuccessors(State state) {
-    return List.of();
   }
 
   @Override
