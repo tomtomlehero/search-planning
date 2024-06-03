@@ -3,8 +3,10 @@ package fr.mla.searchplanning;
 import fr.mla.searchplanning.Tree.Node;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 @Slf4j
 public class Main {
@@ -44,6 +46,7 @@ public class Main {
         Tree<State> searchTree = new Tree<>(initialState);
         PriorityQueue<Node<State>> fringe = new PriorityQueue<>((o1, o2) -> 0);
         fringe.add(searchTree.getRoot());
+        Set<State> closedSet = new HashSet<>();
 
         while (true) {
             if (fringe.isEmpty()) {
@@ -54,6 +57,11 @@ public class Main {
             if (problem.isTerminal(node.getValue())) {
                 return node.getValue();
             }
+
+            if (closedSet.contains(node.getValue())) {
+                continue;
+            }
+            closedSet.add(node.getValue());
 
             List<Node<State>> successors = problem.getSuccessors(node.getValue())
                     .stream().map(Node::new).toList();
