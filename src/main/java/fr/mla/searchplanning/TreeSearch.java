@@ -1,7 +1,6 @@
 package fr.mla.searchplanning;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -55,10 +54,11 @@ public class TreeSearch {
       }
       closedSet.add(node.getValue());
 
-      List<Node<State>> successors = node.getValue().getSuccessors().stream().map(Node::new).toList();
-
-      node.addChildren(successors);
-      fringe.addAll(successors);
+      for (Successor i : node.getValue().getSuccessors()) {
+        Node<State> child = new Node<>(i.getState(), i.getCost() + node.getBackwardCost());
+        node.addChild(child);
+        fringe.add(child);
+      }
     }
   }
 

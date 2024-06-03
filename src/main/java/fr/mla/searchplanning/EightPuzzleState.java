@@ -39,7 +39,7 @@ public class EightPuzzleState implements State {
   }
 
   @Override
-  public List<State> getSuccessors() {
+  public List<Successor> getSuccessors() {
     List<State> successors = new ArrayList<>();
     EightPuzzleState n = moveNorth();
     if (n != null) {
@@ -58,7 +58,7 @@ public class EightPuzzleState implements State {
       successors.add(w);
     }
 
-    return successors;
+    return successors.stream().map(state -> new Successor(state, 1)).toList();
 //    return Stream.of(moveNorth(), moveEast(), moveSouth(), moveWest()).filter(Objects::nonNull).toList();
   }
 

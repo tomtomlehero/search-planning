@@ -12,7 +12,7 @@ public class Tree<S> {
   private final Node<S> root;
 
   public Tree(S root) {
-    this.root = new Node<>(root);
+    this.root = new Node<>(root, 0);
   }
 
   @Getter
@@ -23,23 +23,21 @@ public class Tree<S> {
     private final S value;
 
     @ToString.Include
-    private long backwardCost;
+    private final long backwardCost;
 
     private Node<S> parent;
 
     private final List<Node<S>> children = new ArrayList<>();
 
-    public Node(S s) {
-      this.value = s;
+
+    public Node(S value, long backwardCost) {
+      this.value = value;
+      this.backwardCost = backwardCost;
     }
 
     public void addChild(Node<S> child) {
       child.parent = this;
       children.add(child);
-    }
-
-    public void addChildren(List<Node<S>> children) {
-      children.forEach(this::addChild);
     }
 
   }
