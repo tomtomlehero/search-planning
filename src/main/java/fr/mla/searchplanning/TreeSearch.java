@@ -5,7 +5,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import fr.mla.searchplanning.Tree.Node;
-import fr.mla.searchplanning.problem.eightpuzzle.EightPuzzleProblem;
+import fr.mla.searchplanning.problem.npuzzle.eightpuzzle.NPuzzleProblem;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -13,7 +13,7 @@ public class TreeSearch {
 
   public static void main(String[] args) {
 
-    Problem problem = new EightPuzzleProblem(3, 1, 2, 4, 7, 0, 6, 8, 5);
+    Problem problem = new NPuzzleProblem(3, 1, 2, 4, 7, 0, 6, 8, 5);
 
     try {
       Node<State> goal = doSearch(problem);
@@ -44,6 +44,7 @@ public class TreeSearch {
 
     while (true) {
       if (fringe.isEmpty()) {
+        log.info("Expanded nodes : {}", expandedNodes);
         throw new NoSolutionException();
       }
 
