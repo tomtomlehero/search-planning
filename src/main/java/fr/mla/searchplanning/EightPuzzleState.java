@@ -38,6 +38,12 @@ public class EightPuzzleState implements State {
     this.tiles = tiles;
   }
 
+
+  @Override
+  public long getHeuristic() {
+    return 0;
+  }
+
   @Override
   public List<Successor> getSuccessors() {
     List<State> successors = new ArrayList<>();

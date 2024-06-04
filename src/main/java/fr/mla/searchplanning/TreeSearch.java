@@ -12,7 +12,7 @@ public class TreeSearch {
 
   public static void main(String[] args) {
 
-    Problem problem = new EightPuzzleProblem(1, 0, 2, 3, 4, 5, 6, 7, 8);
+    Problem problem = new EightPuzzleProblem(3, 1, 2, 4, 7, 0, 6, 8, 5);
 
     try {
       Node<State> goal = doSearch(problem);
@@ -35,7 +35,7 @@ public class TreeSearch {
 
     State initialState = problem.getInitialState();
     Tree<State> searchTree = new Tree<>(initialState);
-    PriorityQueue<Node<State>> fringe = new PriorityQueue<>((o1, o2) -> 0);
+    PriorityQueue<Node<State>> fringe = new PriorityQueue<>();
     fringe.add(searchTree.getRoot());
     Set<State> closedSet = new HashSet<>();
 

@@ -3,11 +3,12 @@ package fr.mla.searchplanning;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
-public class Tree<S> {
+public class Tree<S extends State> {
 
   private final Node<S> root;
 
@@ -17,7 +18,8 @@ public class Tree<S> {
 
   @Getter
   @ToString(onlyExplicitlyIncluded = true)
-  public static class Node<S> {
+  @EqualsAndHashCode
+  public static class Node<S extends State> implements Comparable<Node<S>> {
 
     @ToString.Include
     private final S value;
@@ -35,9 +37,22 @@ public class Tree<S> {
       this.backwardCost = backwardCost;
     }
 
+    public long getForwardCost() {
+      return value.getHeuristic();
+    }
+
     public void addChild(Node<S> child) {
       child.parent = this;
       children.add(child);
+    }
+
+    public long getCost() {
+      return getBackwardCost() + getForwardCost();
+    }
+
+    @Override
+    public int compareTo(Node<S> o) {
+      return Long.compare(getCost(), o.getCost());
     }
 
   }

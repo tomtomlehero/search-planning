@@ -6,4 +6,6 @@ public interface State {
 
   List<Successor> getSuccessors();
 
+  long getHeuristic();
+
 }
