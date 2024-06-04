@@ -39,6 +39,8 @@ public class TreeSearch {
     fringe.add(searchTree.getRoot());
     Set<State> closedSet = new HashSet<>();
 
+    long expandedNodes = 0;
+
     while (true) {
       if (fringe.isEmpty()) {
         throw new NoSolutionException();
@@ -46,6 +48,7 @@ public class TreeSearch {
 
       Node<State> node = fringe.poll();
       if (problem.isTerminal(node.getValue())) {
+        log.info("Expanded nodes : {}", expandedNodes);
         return node;
       }
 
@@ -55,6 +58,7 @@ public class TreeSearch {
       closedSet.add(node.getValue());
 
       for (Successor i : node.getValue().getSuccessors()) {
+        expandedNodes++;
         Node<State> child = new Node<>(i.getState(), i.getCost() + node.getBackwardCost());
         node.addChild(child);
         fringe.add(child);

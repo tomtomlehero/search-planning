@@ -3,9 +3,12 @@ package fr.mla.searchplanning;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,6 +22,16 @@ public class EightPuzzleState implements State {
   private static final List<Integer> EAST_TILES_INDEXES = List.of(2, 5, 8);
   private static final List<Integer> SOUTH_TILES_INDEXES = List.of(6, 7, 8);
   private static final List<Integer> WEST_TILES_INDEXES = List.of(0, 3, 6);
+
+  private static final Map<Integer, Coord> FINAL_STATE_TILES_COORDS_MAP = Map.of(
+      1, new Coord(1, 0),
+      2, new Coord(2, 0),
+      3, new Coord(0, 1),
+      4, new Coord(1, 1),
+      5, new Coord(2, 1),
+      6, new Coord(0, 2),
+      7, new Coord(1, 2),
+      8, new Coord(2, 2));
 
 
   @EqualsAndHashCode.Include
@@ -41,8 +54,29 @@ public class EightPuzzleState implements State {
 
   @Override
   public long getHeuristic() {
-    return 0;
+    return distanceToFinal(getTilesCoordMap());
   }
+
+  private Map<Integer, Coord> getTilesCoordMap() {
+
+    Map<Integer, Coord> tilesCoordMap = new HashMap<>();
+    Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9).forEach(i -> {
+      int index = tiles.indexOf(i);
+      tilesCoordMap.put(i, new Coord(index % 3, index / 3));
+    });
+    return tilesCoordMap;
+  }
+
+  private long distanceToFinal(Map<Integer, Coord> map) {
+    long result = 0;
+    for (Map.Entry<Integer, Coord> entry : FINAL_STATE_TILES_COORDS_MAP.entrySet()) {
+      Coord c1 = map.get(entry.getKey());
+      Coord c2 = entry.getValue();
+      result += Math.abs(c1.x - c2.x) + Math.abs(c1.y - c2.y);
+    }
+    return result;
+  }
+
 
   @Override
   public List<Successor> getSuccessors() {
@@ -65,7 +99,6 @@ public class EightPuzzleState implements State {
     }
 
     return successors.stream().map(state -> new Successor(state, 1)).toList();
-//    return Stream.of(moveNorth(), moveEast(), moveSouth(), moveWest()).filter(Objects::nonNull).toList();
   }
 
   private EightPuzzleState moveNorth() {
@@ -104,6 +137,14 @@ public class EightPuzzleState implements State {
     EightPuzzleState result = new EightPuzzleState(new ArrayList<>(tiles));
     Collections.swap(result.tiles, i, j);
     return result;
+  }
+
+
+  @AllArgsConstructor
+  static class Coord {
+
+    private final int x;
+    private final int y;
   }
 
 }
