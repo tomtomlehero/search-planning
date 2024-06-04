@@ -1,4 +1,4 @@
-package fr.mla.searchplanning;
+package fr.mla.searchplanning.problem.eightpuzzle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import fr.mla.searchplanning.State;
+import fr.mla.searchplanning.Successor;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

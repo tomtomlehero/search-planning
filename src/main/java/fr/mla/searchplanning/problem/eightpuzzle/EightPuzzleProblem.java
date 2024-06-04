@@ -1,5 +1,7 @@
-package fr.mla.searchplanning;
+package fr.mla.searchplanning.problem.eightpuzzle;
 
+import fr.mla.searchplanning.Problem;
+import fr.mla.searchplanning.State;
 import lombok.Getter;
 
 public class EightPuzzleProblem implements Problem {
