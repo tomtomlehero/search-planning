@@ -12,11 +12,9 @@ import fr.mla.searchplanning.Successor;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 import static fr.mla.searchplanning.problem.Constant.NPuzzleProblem.N;
 
 @Getter
-@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class NPuzzleState implements State {
 
@@ -129,6 +127,22 @@ public class NPuzzleState implements State {
     return result;
   }
 
+  @Override
+  public String toString() {
+    StringBuilder s = new StringBuilder("\n");
+    IntStream.range(0, N).forEach(l -> {
+      IntStream.range(0, N).forEach(c -> {
+        int t = tiles.get(N * l + c);
+        if (t == 0) {
+          s.append("    ");
+        } else {
+          s.append("   ").append(t);
+        }
+      });
+      s.append("\n\n");
+    });
+    return s.toString();
+  }
 
   @AllArgsConstructor
   static class Coord {

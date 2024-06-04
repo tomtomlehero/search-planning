@@ -13,7 +13,7 @@ public class TreeSearch {
 
   public static void main(String[] args) {
 
-    Problem problem = new NPuzzleProblem(3, 1, 2, 4, 7, 0, 6, 8, 5);
+    Problem problem = new NPuzzleProblem(4, 0, 5, 1, 8, 3, 2, 7, 6);
 
     try {
       Node<State> goal = doSearch(problem);
