@@ -89,7 +89,7 @@ public class NPuzzleState implements State {
     return successors.stream().map(state -> new Successor(state, 1)).toList();
   }
 
-  private NPuzzleState moveNorth() {
+  public NPuzzleState moveNorth() {
     int zIndex = tiles.indexOf(0);
     if (SOUTH_TILES_INDEXES.contains(zIndex)) {
       return null;
@@ -97,7 +97,7 @@ public class NPuzzleState implements State {
     return swap(zIndex, zIndex + N);
   }
 
-  private NPuzzleState moveEast() {
+  public NPuzzleState moveEast() {
     int zIndex = tiles.indexOf(0);
     if (WEST_TILES_INDEXES.contains(zIndex)) {
       return null;
@@ -105,7 +105,7 @@ public class NPuzzleState implements State {
     return swap(zIndex, zIndex - 1);
   }
 
-  private NPuzzleState moveSouth() {
+  public NPuzzleState moveSouth() {
     int zIndex = tiles.indexOf(0);
     if (NORTH_TILES_INDEXES.contains(zIndex)) {
       return null;
@@ -113,7 +113,7 @@ public class NPuzzleState implements State {
     return swap(zIndex, zIndex - N);
   }
 
-  private NPuzzleState moveWest() {
+  public NPuzzleState moveWest() {
     int zIndex = tiles.indexOf(0);
     if (EAST_TILES_INDEXES.contains(zIndex)) {
       return null;
@@ -134,9 +134,9 @@ public class NPuzzleState implements State {
       IntStream.range(0, N).forEach(c -> {
         int t = tiles.get(N * l + c);
         if (t == 0) {
-          s.append("    ");
+          s.append("     ");
         } else {
-          s.append("   ").append(t);
+          s.append("   ").append(String.format("%02d", t));
         }
       });
       s.append("\n\n");

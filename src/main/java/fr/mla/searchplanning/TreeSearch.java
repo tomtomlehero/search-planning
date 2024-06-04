@@ -13,7 +13,7 @@ public class TreeSearch {
 
   public static void main(String[] args) {
 
-    Problem problem = new NPuzzleProblem(4, 0, 5, 1, 8, 3, 2, 7, 6);
+    Problem problem = new NPuzzleProblem(3, 11, 2, 8, 12, 5, 7, 1, 6, 14, 9, 15, 0, 4, 13, 10);
 
     try {
       Node<State> goal = doSearch(problem);
@@ -40,17 +40,14 @@ public class TreeSearch {
     fringe.add(searchTree.getRoot());
     Set<State> closedSet = new HashSet<>();
 
-    long expandedNodes = 0;
-
     while (true) {
       if (fringe.isEmpty()) {
-        log.info("Expanded nodes : {}", expandedNodes);
         throw new NoSolutionException();
       }
 
       Node<State> node = fringe.poll();
       if (problem.isTerminal(node.getValue())) {
-        log.info("Expanded nodes : {}", expandedNodes);
+        log.info("Expanded nodes: {}", expandedNodes);
         return node;
       }
 
@@ -60,12 +57,24 @@ public class TreeSearch {
       closedSet.add(node.getValue());
 
       for (Successor i : node.getValue().getSuccessors()) {
-        expandedNodes++;
+        logProgression(node);
         Node<State> child = new Node<>(i.getState(), i.getCost() + node.getBackwardCost());
         node.addChild(child);
         fringe.add(child);
       }
     }
   }
+
+  private static void logProgression(Node node) {
+    if (++expandedNodes % 100_000 == 0) {
+      log.info("{}", node.getValue());
+      log.info("Expanded nodes : {}", expandedNodes);
+      log.info("Backward cost: {} - Forward cost: {} - Estimated cost: {}", node.getBackwardCost(), node.getForwardCost(),
+          node.getBackwardCost() + node.getForwardCost());
+    }
+
+  }
+
+  private static long expandedNodes = 0;
 
 }
