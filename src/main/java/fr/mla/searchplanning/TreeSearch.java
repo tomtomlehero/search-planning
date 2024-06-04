@@ -5,7 +5,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import fr.mla.searchplanning.Tree.Node;
-import fr.mla.searchplanning.problem.npuzzle.eightpuzzle.NPuzzleProblem;
+import fr.mla.searchplanning.problem.npuzzle.NPuzzleProblem;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

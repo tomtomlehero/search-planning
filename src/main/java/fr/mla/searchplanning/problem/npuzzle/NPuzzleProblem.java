@@ -1,4 +1,4 @@
-package fr.mla.searchplanning.problem.npuzzle.eightpuzzle;
+package fr.mla.searchplanning.problem.npuzzle;
 
 import java.util.Arrays;
 import java.util.List;
