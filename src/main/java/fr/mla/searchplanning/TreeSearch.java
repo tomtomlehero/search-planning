@@ -13,7 +13,11 @@ public class TreeSearch {
 
   public static void main(String[] args) {
 
-    Problem problem = new NPuzzleProblem(3, 11, 2, 8, 12, 5, 7, 1, 6, 14, 9, 15, 0, 4, 13, 10);
+    Problem problem =
+        new NPuzzleProblem(12, 20, 10, 14, 3, 5, 6, 7, 8, 9, 21, 13, 23, 22, 4, 15, 16, 17, 18, 19, 2, 11, 1, 24, 25, 35, 26, 27, 28, 29,
+            30, 31, 32, 33, 44, 34, 36, 37, 38, 39, 40, 41, 42, 43, 45, 55, 47, 48, 58, 49, 50, 51, 52, 53, 54, 65, 46, 67, 59, 78, 60, 61,
+            62, 63, 75, 66, 57, 56, 68, 69, 70, 71, 72, 84, 64, 74, 87, 76, 79, 89, 80, 81, 82, 93, 73, 83, 85, 77, 98, 88, 90, 91, 0, 92,
+            94, 95, 86, 96, 97, 99);
 
     try {
       Node<State> goal = doSearch(problem);
@@ -65,7 +69,7 @@ public class TreeSearch {
     }
   }
 
-  private static void logProgression(Node node) {
+  private static void logProgression(Node<State> node) {
     if (++expandedNodes % 100_000 == 0) {
       log.info("{}", node.getValue());
       log.info("Expanded nodes : {}", expandedNodes);

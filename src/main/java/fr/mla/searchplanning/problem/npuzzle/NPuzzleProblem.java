@@ -18,7 +18,7 @@ public class NPuzzleProblem implements Problem {
 
   public NPuzzleProblem(Integer... tiles) {
     List<Integer> tileList = Arrays.asList(tiles);
-    boolean valid = (tileList.size() == (N * N)) && IntStream.range(0, N).allMatch(tileList::contains);
+    boolean valid = (tileList.size() == (N * N)) && IntStream.range(0, N * N).allMatch(tileList::contains);
     if (!valid) {
       throw new IllegalArgumentException("Invalid State " + tileList);
     }

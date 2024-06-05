@@ -8,7 +8,7 @@ public class Constant {
   @UtilityClass
   public static class NPuzzleProblem {
 
-    public static final int N = 4;
+    public static final int N = 10;
 
   }
 
