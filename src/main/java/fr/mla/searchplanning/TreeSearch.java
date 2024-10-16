@@ -1,6 +1,10 @@
 package fr.mla.searchplanning;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
@@ -14,25 +18,40 @@ public class TreeSearch {
   public static void main(String[] args) {
 
     Problem problem =
-        new NPuzzleProblem(12, 20, 10, 14, 3, 5, 6, 7, 8, 9, 21, 13, 23, 22, 4, 15, 16, 17, 18, 19, 2, 11, 1, 24, 25, 35, 26, 27, 28, 29,
-            30, 31, 32, 33, 44, 34, 36, 37, 38, 39, 40, 41, 42, 43, 45, 55, 47, 48, 58, 49, 50, 51, 52, 53, 54, 65, 46, 67, 59, 78, 60, 61,
-            62, 63, 75, 66, 57, 56, 68, 69, 70, 71, 72, 84, 64, 74, 87, 76, 79, 89, 80, 81, 82, 93, 73, 83, 85, 77, 98, 88, 90, 91, 0, 92,
-            94, 95, 86, 96, 97, 99);
+        new NPuzzleProblem(1, 2, 3, 9, 4, 5, 13, 7, 8, 6, 10, 11, 14, 12, 15, 21, 16, 17, 18, 19, 20, 27, 22, 23, 24, 25, 0, 32, 28, 29, 30,
+            31, 33, 26, 34, 35);
 
     try {
       Node<State> goal = doSearch(problem);
-
-      Node<State> n = goal;
-      int i = 0;
       log.info("Found ;-)");
-      while (n != null) {
-        log.info("{} {}", i++, n);
-        n = n.getParent();
-      }
+
+      showSolution(goal);
 
     } catch (NoSolutionException e) {
       log.error("No solution found :-(");
     }
+  }
+
+  private static void showSolution(Node<State> goal) {
+    List<State> s = new ArrayList<>();
+    Node<State> n = goal;
+    while (n != null) {
+      s.add(n.getValue());
+      n = n.getParent();
+    }
+    Collections.reverse(s);
+    s.forEach(move -> {
+
+      try {
+        System.out.println(move);
+
+//      log.info("\f");
+//      log.info("{}", move);
+        Thread.sleep(300);
+        Runtime.getRuntime().exec("cls");
+      } catch (InterruptedException | IOException e) {
+      }
+    });
   }
 
 

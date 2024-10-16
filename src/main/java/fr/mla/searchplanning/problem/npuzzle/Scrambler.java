@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 import com.google.common.math.Stats;
 
@@ -27,12 +28,14 @@ public class Scrambler {
 
 //    NPuzzleState initial = scramble(NUMBER_OF_MOVES);
 
-    for (int h = 0; h <= 200; h++) {
-      NPuzzleState initial = scrambleToTargetHeuristic(h);
-      log.info("{}", initial);
-      log.info("{}", initial.getTiles());
-      log.info("Heuristic: {}", initial.getHeuristic());
-    }
+    LongStream.rangeClosed(0, 50).forEach(h -> {
+      NPuzzleState puzzle = scrambleToTargetHeuristic(10 * h);
+      log.info("-------------------------------------------------------------------------------------");
+      log.info("{}", puzzle);
+      log.info("{}", puzzle.getTiles());
+      log.info("Heuristic: {}", puzzle.getHeuristic());
+    });
+
   }
 
 
@@ -76,10 +79,10 @@ public class Scrambler {
 
     Map<Integer, StatisticsOnListOfLongs> statMap = new TreeMap<>();
 
-    IntStream.of(1, 2, 3, 4, 5, 10, 50, 100, 500, 1000, 10000).forEach(moves -> {
+    IntStream.of(1, 2, 3, 4, 5, 10, 50, 100, 500, 1000, 10000, 100000, 1000000).forEach(moves -> {
       log.info("Computing: {} moves", moves);
       List<Long> list = new ArrayList<>();
-      for (int i = 0; i < 10000; i++) {
+      for (int i = 0; i < 1000; i++) {
         NPuzzleState state = scramble(moves);
         list.add(state.getHeuristic());
       }
