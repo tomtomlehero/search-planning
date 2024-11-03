@@ -1,4 +1,4 @@
-package fr.mla.searchplanning;
+package fr.mla;
 
 public class NoSolutionException extends Exception {
 }
