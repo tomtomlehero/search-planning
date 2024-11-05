@@ -1,38 +1,46 @@
 package fr.mla.csp;
 
-import fr.mla.NoSolutionException;
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-public abstract class CSP {
+import fr.mla.NoSolutionException;
 
-  Set<Variable> variables;
+public abstract class CSP<V extends Variable<?>> {
 
-  public Assignment backtrackingSearch() throws NoSolutionException {
-    return backtrackingSearch(emptyAssignment());
+  protected Set<V> variables;
+  protected Map<V, List<Value>> domain;
+
+  public Map<V, Value> backtrackingSearch() throws NoSolutionException {
+    return backtrackingSearch(new HashMap<>());
   }
 
-  private Assignment backtrackingSearch(Assignment assignment) throws NoSolutionException {
-    if (assignment.isComplete()) {
+  private HashMap<V, Value> backtrackingSearch(HashMap<V, Value> assignment) throws NoSolutionException {
+    if (isComplete(assignment)) {
       return assignment;
     }
-    Variable variable = selectUnassigned(assignment);
+    V variable = selectUnassigned(assignment);
     for (Value value : variable.getOrderDomainValues()) {
       if (isConsistent(value, assignment)) {
-        assignment.add(variable, value);
+        assignment.put(variable, value);
         try {
           return backtrackingSearch(assignment);
         } catch (NoSolutionException e) {
-          assignment.remove(variable, value);
+          assignment.remove(variable);
         }
       }
     }
     throw new NoSolutionException();
   }
 
-  protected abstract Variable selectUnassigned(Assignment assignment);
+  private boolean isComplete(HashMap<V, Value> assignment) {
+    return assignment.size() == variables.size();
+  }
 
-  protected abstract boolean isConsistent(Value value, Assignment assignment);
+  protected abstract V selectUnassigned(HashMap<V, Value> assignment);
+
+  protected abstract boolean isConsistent(Value value, HashMap<V, Value> assignment);
 
   protected abstract Assignment emptyAssignment();
 

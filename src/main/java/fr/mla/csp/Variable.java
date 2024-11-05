@@ -2,8 +2,15 @@ package fr.mla.csp;
 
 import java.util.List;
 
-public interface Variable {
+import lombok.Getter;
+import lombok.Setter;
 
-    List<Value> getOrderDomainValues();
+@Getter
+@Setter
+public abstract class Variable<T> {
+
+  T value;
+
+  protected abstract List<Value> getOrderDomainValues();
 
 }

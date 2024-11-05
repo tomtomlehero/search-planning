@@ -1,11 +1,9 @@
 package fr.mla.csp;
 
-public abstract class Assignment {
+import java.util.HashMap;
 
-    protected abstract boolean isComplete();
+public abstract class Assignment extends HashMap<Variable<?>, Value> {
 
-    protected abstract void add(Variable variable, Value value);
-
-    protected abstract void remove(Variable variable, Value value);
+  protected abstract boolean isComplete();
 
 }
