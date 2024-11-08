@@ -13,6 +13,7 @@ public class NQueenVariable extends Variable<Integer, NQueenValue> {
     this.set(value);
   }
 
+
   @Override
   public List<NQueenValue> getOrderDomainValues() {
     List<NQueenValue> orderDomainValues = new ArrayList<>();

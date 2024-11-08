@@ -17,4 +17,9 @@ public abstract class Value<T> {
     this.v = v;
   }
 
+  @Override
+  public String toString() {
+    return v.toString();
+  }
+
 }

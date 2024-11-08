@@ -14,6 +14,11 @@ public abstract class Variable<T, U extends Value<?>> {
     this.v = v;
   }
 
+  @Override
+  public String toString() {
+    return v.toString();
+  }
+
   protected abstract List<U> getOrderDomainValues();
 
 }

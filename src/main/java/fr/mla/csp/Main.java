@@ -1,5 +1,6 @@
 package fr.mla.csp;
 
+import java.util.Comparator;
 import java.util.Map;
 
 import fr.mla.NoSolutionException;
@@ -15,7 +16,9 @@ public class Main {
     NQueen nQueen = new NQueen();
     try {
       Map<NQueenVariable, NQueenValue> assignment = nQueen.backtrackingSearch();
-      log.info(assignment.toString());
+      for (NQueenVariable v : assignment.keySet().stream().sorted(Comparator.comparing(Variable::get)).toList()) {
+        log.info("{} : {}", v.toString(), assignment.get(v));
+      }
     } catch (NoSolutionException e) {
       log.error("No Solution Found");
     }
