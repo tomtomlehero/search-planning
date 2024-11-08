@@ -2,15 +2,18 @@ package fr.mla.csp;
 
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
+public abstract class Variable<T, U extends Value<?>> {
 
-@Getter
-@Setter
-public abstract class Variable<T> {
+  T v;
 
-  T value;
+  public T get() {
+    return v;
+  }
 
-  protected abstract List<Value> getOrderDomainValues();
+  public void set(T v) {
+    this.v = v;
+  }
+
+  protected abstract List<U> getOrderDomainValues();
 
 }

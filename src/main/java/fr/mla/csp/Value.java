@@ -1,4 +1,20 @@
 package fr.mla.csp;
 
-public class Value {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public abstract class Value<T> {
+
+  T v;
+
+  public T get() {
+    return v;
+  }
+
+  public void set(T v) {
+    this.v = v;
+  }
+
 }
