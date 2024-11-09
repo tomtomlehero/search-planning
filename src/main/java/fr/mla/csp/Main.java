@@ -17,7 +17,7 @@ public class Main {
     try {
       Map<NQueenVariable, NQueenValue> assignment = nQueen.backtrackingSearch();
       for (NQueenVariable v : assignment.keySet().stream().sorted(Comparator.comparing(Variable::get)).toList()) {
-        log.info("{} : {}", v.toString(), assignment.get(v));
+        log.info("{}", assignment.get(v));
       }
     } catch (NoSolutionException e) {
       log.error("No Solution Found");

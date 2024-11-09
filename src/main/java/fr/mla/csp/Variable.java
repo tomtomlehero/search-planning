@@ -4,7 +4,7 @@ import java.util.List;
 
 public abstract class Variable<T, U extends Value<?>> {
 
-  T v;
+  protected T v;
 
   public T get() {
     return v;

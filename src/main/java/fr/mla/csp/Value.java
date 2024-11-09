@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public abstract class Value<T> {
 
-  T v;
+  protected T v;
 
   public T get() {
     return v;
