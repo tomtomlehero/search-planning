@@ -2,7 +2,7 @@ package fr.mla.csp;
 
 import java.util.List;
 
-public abstract class Variable<T, U extends Value<?>> {
+public abstract class Variable<T extends Comparable<T>, U extends Value<?>> {
 
   protected T v;
 
