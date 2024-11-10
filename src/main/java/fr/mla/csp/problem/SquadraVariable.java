@@ -15,9 +15,9 @@ import static fr.mla.csp.problem.Squadra.PILOT_NUMBER;
 
 public class SquadraVariable extends Variable<SquadraVariable.Pair, SquadraValue> {
 
-  private static final List<SquadraValue> pilots = new ArrayList<>();
+  public static final List<SquadraValue> pilots = new ArrayList<>();
   static {
-    IntStream.range(0, PILOT_NUMBER).forEach(i -> pilots.add(new SquadraValue("Pilot #" + (i + 1))));
+    IntStream.range(0, PILOT_NUMBER).forEach(i -> pilots.add(new SquadraValue(i + 1, "Pilot #" + (i + 1))));
   }
 
   public SquadraVariable(Leg leg, Role role) {
@@ -31,7 +31,8 @@ public class SquadraVariable extends Variable<SquadraVariable.Pair, SquadraValue
 
 
   public enum Role {
-    PILOT, COPILOT
+    PILOT,
+//    COPILOT
   }
 
   @Getter
@@ -75,11 +76,7 @@ public class SquadraVariable extends Variable<SquadraVariable.Pair, SquadraValue
 
     @Override
     public String toString() {
-      return "Leg[" +
-              "day=" + day + ", " +
-              "rank=" + rank + ", " +
-              "length=" + length + ", " +
-              "rating=" + rating + ']';
+      return "rank=" + rank + ", " + "day=" + day + ", " + "rating=" + rating;
     }
 
     @Override
@@ -105,7 +102,7 @@ public class SquadraVariable extends Variable<SquadraVariable.Pair, SquadraValue
 
     @Override
     public String toString() {
-      return String.format("%s : %s", leg, role);
+      return String.format("%s [%s]", leg, role);
     }
 
   }

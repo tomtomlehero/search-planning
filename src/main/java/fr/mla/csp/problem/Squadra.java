@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class Squadra extends CSP<SquadraVariable, SquadraValue> {
@@ -40,7 +41,7 @@ public class Squadra extends CSP<SquadraVariable, SquadraValue> {
 
   @Override
   protected boolean isConsistent(SquadraVariable variable, SquadraValue value, Map<SquadraVariable, SquadraValue> assignment) {
-    if (!isXXXX1(variable, value, assignment)) {
+    if (!isFair1(variable, value, assignment)) {
       return false;
     }
     if (!isXXXX2(variable, value, assignment)) {
@@ -55,8 +56,21 @@ public class Squadra extends CSP<SquadraVariable, SquadraValue> {
     return true;
   }
 
-  private boolean isXXXX1(SquadraVariable variable, SquadraValue value, Map<SquadraVariable, SquadraValue> assignment) {
-    return true;
+  /**
+   * All pilots have (almost) the same number of flights
+   */
+  private boolean isFair1(SquadraVariable variable, SquadraValue value, Map<SquadraVariable, SquadraValue> assignment) {
+
+    if (assignment.size() < variables.size() - 1) {
+      return true;
+    }
+    Map<SquadraValue, Long> flightNumberByPilot = assignment.entrySet().stream()
+            .filter(entry -> entry.getKey().get().getRole() == SquadraVariable.Role.PILOT)
+            .collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.counting()));
+
+    SquadraVariable.pilots.forEach(squadraValue -> flightNumberByPilot.computeIfAbsent(squadraValue, s -> 0L));
+    flightNumberByPilot.put(value, flightNumberByPilot.get(value) + 1);
+    return flightNumberByPilot.values().stream().noneMatch(n -> n < 2);
   }
 
   private boolean isXXXX2(SquadraVariable variable, SquadraValue value, Map<SquadraVariable, SquadraValue> assignment) {
