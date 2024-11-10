@@ -38,18 +38,34 @@ public class SquadraVariable extends Variable<SquadraVariable.Pair, SquadraValue
   @RequiredArgsConstructor
   public static class Leg implements Comparable<Leg> {
 
-    private final int day;
     private final int rank;
+    private final int day;
+
+    private final String from;
+    private final String fromOaci;
+    private final String to;
+    private final String toOaci;
 
     private final int length;
     private final double rating;
+
+    public Leg(String[] leg) {
+      this(Integer.parseInt(leg[0]),
+              Integer.parseInt(leg[1]),
+              leg[2],
+              leg[3],
+              leg[4],
+              leg[5],
+              Integer.parseInt(leg[6]),
+              Double.parseDouble(leg[7].replace(',', '.')));
+    }
 
     @Override
     public boolean equals(Object o) {
       if (this == o) return true;
       if (o == null || getClass() != o.getClass()) return false;
       Leg leg = (Leg) o;
-      return day == leg.day && rank == leg.rank;
+      return rank == leg.rank;
     }
 
     @Override
@@ -68,10 +84,7 @@ public class SquadraVariable extends Variable<SquadraVariable.Pair, SquadraValue
 
     @Override
     public int compareTo(@NonNull Leg other) {
-      if (this.equals(other)) {
-        return 0;
-      }
-      return Comparator.comparing(Leg::getDay).thenComparing(Leg::getRank).compare(this, other);
+      return Comparator.comparing(Leg::getRank).compare(this, other);
     }
   }
 

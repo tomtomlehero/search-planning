@@ -1,24 +1,40 @@
 package fr.mla.csp.problem;
 
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
 import fr.mla.NoSolutionException;
 import fr.mla.csp.CSP;
 import fr.mla.csp.Variable;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Slf4j
 public class Squadra extends CSP<SquadraVariable, SquadraValue> {
 
-  static final int PILOT_NUMBER = 6;
+  public static final int PILOT_NUMBER = 6;
+  private static final String LEGS_FILE = "legs.tsv";
 
   public Squadra() {
-    Set<SquadraVariable> variables = new HashSet<>();
-    for (SquadraVariable.Role role : SquadraVariable.Role.values()) {
-      variables.add(new SquadraVariable(new SquadraVariable.Leg(1, 1, 345, 1.5), role));
-      variables.add(new SquadraVariable(new SquadraVariable.Leg(1, 2, 235, 1.8), role));
-      variables.add(new SquadraVariable(new SquadraVariable.Leg(1, 3, 258, 2.4), role));
+    List<String[]> legs;
+    try {
+      legs = readLegsFile();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
+    Set<SquadraVariable> variables = new HashSet<>();
+    for (String[] leg : legs) {
+      for (SquadraVariable.Role role : SquadraVariable.Role.values()) {
+        variables.add(new SquadraVariable(new SquadraVariable.Leg(leg), role));
+      }
+    }
+
     this.variables = variables;
   }
 
@@ -57,6 +73,27 @@ public class Squadra extends CSP<SquadraVariable, SquadraValue> {
 
 
 
+  private CSVReader getCsvReader(Reader reader) {
+    CSVParser parser = new CSVParserBuilder()
+            .withSeparator('\t')
+            .withIgnoreQuotations(true)
+            .build();
+
+    return new CSVReaderBuilder(reader)
+            .withSkipLines(0)
+            .withCSVParser(parser)
+            .build();
+  }
+
+
+  private List<String[]> readLegsFile() throws Exception {
+    Path path = Paths.get(ClassLoader.getSystemResource(LEGS_FILE).toURI());
+    try (Reader reader = Files.newBufferedReader(path)) {
+      try (CSVReader csvReader = getCsvReader(reader)) {
+        return csvReader.readAll();
+      }
+    }
+  }
 
 
   public static void main(String[] args) {
