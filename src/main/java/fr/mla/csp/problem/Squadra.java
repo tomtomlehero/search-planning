@@ -1,20 +1,25 @@
 package fr.mla.csp.problem;
 
-import com.opencsv.CSVParser;
-import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-import fr.mla.NoSolutionException;
-import fr.mla.csp.CSP;
-import fr.mla.csp.Variable;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.opencsv.CSVParser;
+import com.opencsv.CSVParserBuilder;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVReaderBuilder;
+
+import fr.mla.NoSolutionException;
+import fr.mla.csp.CSP;
+import fr.mla.csp.Variable;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Squadra extends CSP<SquadraVariable, SquadraValue> {
@@ -41,18 +46,18 @@ public class Squadra extends CSP<SquadraVariable, SquadraValue> {
 
   @Override
   protected boolean isConsistent(SquadraVariable variable, SquadraValue value, Map<SquadraVariable, SquadraValue> assignment) {
-    if (!isFair1(variable, value, assignment)) {
+    if (!isRest2(variable, value, assignment)) {
       return false;
     }
-    if (!isXXXX2(variable, value, assignment)) {
-      return false;
-    }
-    if (!isXXXX3(variable, value, assignment)) {
-      return false;
-    }
-    if (!isXXXX4(variable, value, assignment)) {
-      return false;
-    }
+//    if (!isFair1(variable, value, assignment)) {
+//      return false;
+//    }
+//    if (!isXXXX3(variable, value, assignment)) {
+//      return false;
+//    }
+//    if (!isXXXX4(variable, value, assignment)) {
+//      return false;
+//    }
     return true;
   }
 
@@ -65,16 +70,22 @@ public class Squadra extends CSP<SquadraVariable, SquadraValue> {
       return true;
     }
     Map<SquadraValue, Long> flightNumberByPilot = assignment.entrySet().stream()
-            .filter(entry -> entry.getKey().get().getRole() == SquadraVariable.Role.PILOT)
-            .collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.counting()));
+        .filter(entry -> entry.getKey().get().getRole() == SquadraVariable.Role.PILOT)
+        .collect(Collectors.groupingBy(Map.Entry::getValue, Collectors.counting()));
 
     SquadraVariable.pilots.forEach(squadraValue -> flightNumberByPilot.computeIfAbsent(squadraValue, s -> 0L));
     flightNumberByPilot.put(value, flightNumberByPilot.get(value) + 1);
-    return flightNumberByPilot.values().stream().noneMatch(n -> n < 2);
+    return flightNumberByPilot.values().stream().noneMatch(n -> n < 3 || n > 4);
   }
 
-  private boolean isXXXX2(SquadraVariable variable, SquadraValue value, Map<SquadraVariable, SquadraValue> assignment) {
-    return true;
+  /**
+   * Not any pilot does two consecutive flights
+   */
+  private boolean isRest2(SquadraVariable variable, SquadraValue value, Map<SquadraVariable, SquadraValue> assignment) {
+    return assignment.entrySet().stream()
+        .filter(v -> v.getKey().get().getLeg().getRank() == variable.get().getLeg().getRank() - 1 ||
+            v.getKey().get().getLeg().getRank() == variable.get().getLeg().getRank() + 1)
+        .noneMatch(entry -> entry.getValue().equals(value));
   }
 
   private boolean isXXXX3(SquadraVariable variable, SquadraValue value, Map<SquadraVariable, SquadraValue> assignment) {
@@ -86,17 +97,16 @@ public class Squadra extends CSP<SquadraVariable, SquadraValue> {
   }
 
 
-
   private CSVReader getCsvReader(Reader reader) {
     CSVParser parser = new CSVParserBuilder()
-            .withSeparator('\t')
-            .withIgnoreQuotations(true)
-            .build();
+        .withSeparator('\t')
+        .withIgnoreQuotations(true)
+        .build();
 
     return new CSVReaderBuilder(reader)
-            .withSkipLines(0)
-            .withCSVParser(parser)
-            .build();
+        .withSkipLines(0)
+        .withCSVParser(parser)
+        .build();
   }
 
 
