@@ -1,10 +1,10 @@
 package fr.mla.csp.problem;
 
-import fr.mla.csp.Variable;
-
 import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import fr.mla.csp.Variable;
 
 public class MapColoringVariable extends Variable<MapColoringVariable.State, MapColoringValue> {
 
@@ -17,8 +17,8 @@ public class MapColoringVariable extends Variable<MapColoringVariable.State, Map
   }
 
   @Override
-  public List<MapColoringValue> getOrderDomainValues() {
-    return Arrays.stream(MapColoringValue.Color.values()).map(MapColoringValue::new).collect(Collectors.toList());
+  public Set<MapColoringValue> getInitialDomainValues() {
+    return Arrays.stream(MapColoringValue.Color.values()).map(MapColoringValue::new).collect(Collectors.toSet());
   }
 
 }

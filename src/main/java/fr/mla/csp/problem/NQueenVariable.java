@@ -1,7 +1,7 @@
 package fr.mla.csp.problem;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import fr.mla.csp.Variable;
@@ -15,8 +15,8 @@ public class NQueenVariable extends Variable<Integer, NQueenValue> {
 
 
   @Override
-  public List<NQueenValue> getOrderDomainValues() {
-    List<NQueenValue> orderDomainValues = new ArrayList<>();
+  public Set<NQueenValue> getInitialDomainValues() {
+    Set<NQueenValue> orderDomainValues = new HashSet<>();
     IntStream.range(0, N).forEach(k -> orderDomainValues.add(new NQueenValue(k)));
     return orderDomainValues;
   }

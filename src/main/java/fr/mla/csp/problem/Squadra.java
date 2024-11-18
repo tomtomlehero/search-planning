@@ -49,9 +49,9 @@ public class Squadra extends CSP<SquadraVariable, SquadraValue> {
     if (!isRest2(variable, value, assignment)) {
       return false;
     }
-//    if (!isFair1(variable, value, assignment)) {
-//      return false;
-//    }
+    if (!isFair1(variable, value, assignment)) {
+      return false;
+    }
 //    if (!isXXXX3(variable, value, assignment)) {
 //      return false;
 //    }

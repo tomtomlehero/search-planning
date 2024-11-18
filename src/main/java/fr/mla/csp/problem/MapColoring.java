@@ -1,11 +1,12 @@
 package fr.mla.csp.problem;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import fr.mla.NoSolutionException;
 import fr.mla.csp.CSP;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class MapColoring extends CSP<MapColoringVariable, MapColoringValue> {
@@ -16,7 +17,7 @@ public class MapColoring extends CSP<MapColoringVariable, MapColoringValue> {
 
   @Override
   protected boolean isConsistent(MapColoringVariable variable, MapColoringValue value,
-                                 Map<MapColoringVariable, MapColoringValue> assignment) {
+      Map<MapColoringVariable, MapColoringValue> assignment) {
     return true;
   }
 
@@ -24,13 +25,12 @@ public class MapColoring extends CSP<MapColoringVariable, MapColoringValue> {
     MapColoring mapColoring = new MapColoring();
     try {
       Map<MapColoringVariable, MapColoringValue> assignment = mapColoring.backtrackingSearch();
-      for (MapColoringVariable v : assignment.keySet()) {
-        log.info("{} : {}", v, assignment.get(v));
+      for (Map.Entry<MapColoringVariable, MapColoringValue> entry : assignment.entrySet()) {
+        log.info("{} : {}", entry.getKey(), entry.getValue());
       }
     } catch (NoSolutionException e) {
       log.error("No Solution Found");
     }
   }
-
 
 }

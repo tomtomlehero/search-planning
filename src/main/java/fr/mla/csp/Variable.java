@@ -1,6 +1,6 @@
 package fr.mla.csp;
 
-import java.util.List;
+import java.util.Set;
 
 public abstract class Variable<T extends Comparable<T>, U extends Value<?>> {
 
@@ -19,6 +19,6 @@ public abstract class Variable<T extends Comparable<T>, U extends Value<?>> {
     return v.toString();
   }
 
-  protected abstract List<U> getOrderDomainValues();
+  protected abstract Set<U> getInitialDomainValues();
 
 }

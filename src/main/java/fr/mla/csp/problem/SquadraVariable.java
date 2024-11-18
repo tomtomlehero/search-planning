@@ -1,21 +1,21 @@
 package fr.mla.csp.problem;
 
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.IntStream;
+
 import fr.mla.csp.Variable;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.IntStream;
-
 import static fr.mla.csp.problem.Squadra.PILOT_NUMBER;
 
 public class SquadraVariable extends Variable<SquadraVariable.Pair, SquadraValue> {
 
-  public static final List<SquadraValue> pilots = new ArrayList<>();
+  protected static final Set<SquadraValue> pilots = new HashSet<>();
+
   static {
     IntStream.range(0, PILOT_NUMBER).forEach(i -> pilots.add(new SquadraValue(i + 1, "Pilot #" + (i + 1))));
   }
@@ -25,7 +25,7 @@ public class SquadraVariable extends Variable<SquadraVariable.Pair, SquadraValue
   }
 
   @Override
-  public List<SquadraValue> getOrderDomainValues() {
+  public Set<SquadraValue> getInitialDomainValues() {
     return pilots;
   }
 
@@ -52,19 +52,23 @@ public class SquadraVariable extends Variable<SquadraVariable.Pair, SquadraValue
 
     public Leg(String[] leg) {
       this(Integer.parseInt(leg[0]),
-              Integer.parseInt(leg[1]),
-              leg[2],
-              leg[3],
-              leg[4],
-              leg[5],
-              Integer.parseInt(leg[6]),
-              Double.parseDouble(leg[7].replace(',', '.')));
+          Integer.parseInt(leg[1]),
+          leg[2],
+          leg[3],
+          leg[4],
+          leg[5],
+          Integer.parseInt(leg[6]),
+          Double.parseDouble(leg[7].replace(',', '.')));
     }
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
       Leg leg = (Leg) o;
       return rank == leg.rank;
     }
