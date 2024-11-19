@@ -18,8 +18,51 @@ public class MapColoring extends CSP<MapColoringVariable, MapColoringValue> {
   @Override
   protected boolean isConsistent(MapColoringVariable variable, MapColoringValue value,
       Map<MapColoringVariable, MapColoringValue> assignment) {
-    return true;
+
+    switch (variable.get()) {
+      case WA -> {
+        return checkAdjacent(MapColoringVariable.State.NT, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.SA, value, assignment);
+      }
+      case NT -> {
+        return checkAdjacent(MapColoringVariable.State.WA, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.SA, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.Q, value, assignment);
+      }
+      case Q -> {
+        return checkAdjacent(MapColoringVariable.State.NT, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.SA, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.NSW, value, assignment);
+      }
+      case NSW -> {
+        return checkAdjacent(MapColoringVariable.State.Q, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.SA, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.V, value, assignment);
+      }
+      case V -> {
+        return checkAdjacent(MapColoringVariable.State.NSW, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.SA, value, assignment);
+      }
+      case SA -> {
+        return checkAdjacent(MapColoringVariable.State.WA, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.NT, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.Q, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.NSW, value, assignment)
+            && checkAdjacent(MapColoringVariable.State.V, value, assignment);
+      }
+      case T -> {
+        return true;
+      }
+    }
+    throw new IllegalStateException("Unexpected value: " + variable.get());
   }
+
+  private boolean checkAdjacent(MapColoringVariable.State state, MapColoringValue value,
+      Map<MapColoringVariable, MapColoringValue> assignment) {
+    return assignment.entrySet().stream()
+        .noneMatch(e -> e.getKey().get() == state && e.getValue().get() == value.get());
+  }
+
 
   public static void main(String[] args) {
     MapColoring mapColoring = new MapColoring();
