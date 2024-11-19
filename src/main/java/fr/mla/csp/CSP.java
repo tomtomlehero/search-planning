@@ -26,13 +26,15 @@ public abstract class CSP<V extends Variable<?, U>, U extends Value<?>> {
     if (isComplete(assignment)) {
       return assignment;
     }
-    V variable = selectUnassigned(assignment);
-    for (U value : variable.getInitialDomainValues()) {
+    V variable = selectUnassigned(assignment, domains);
+    for (U value : domains.get(variable)) {
       if (isConsistent(variable, value, assignment)) {
         assignment.put(variable, value);
         try {
-          Map<V, Set<U>> domainsLookAhead = lookAhead(domains);
-          return backtrackingSearch(assignment, domainsLookAhead);
+          Map<V, Set<U>> domainsLookAhead = lookAhead(assignment, domains, variable, value);
+          if (allDomainsNotEmpty(domainsLookAhead)) {
+            return backtrackingSearch(assignment, domainsLookAhead);
+          }
         } catch (NoSolutionException e) {
           assignment.remove(variable);
         }
@@ -41,11 +43,20 @@ public abstract class CSP<V extends Variable<?, U>, U extends Value<?>> {
     throw new NoSolutionException();
   }
 
-  private Map<V, Set<U>> lookAhead(Map<V, Set<U>> domains) {
+  private boolean allDomainsNotEmpty(Map<V, Set<U>> domains) {
+    return domains.values().stream().noneMatch(Set::isEmpty);
+  }
+
+  private Map<V, Set<U>> lookAhead(Map<V, U> assignment, Map<V, Set<U>> domains, V variable, U value) {
     Map<V, Set<U>> domainsAhead = new HashMap<>();
-    domains.forEach((key, value) -> {
-      Set<U> prunedDomain = new HashSet<>(value);
-      domainsAhead.put(key, prunedDomain);
+    domains.forEach((v, values) -> {
+      Set<U> prunedDomain = new HashSet<>(values);
+      if (v.get() == variable.get()) {
+        prunedDomain.removeIf(u -> !u.get().equals(value.get()));
+      } else {
+        prunedDomain.removeIf(u -> !isConsistent(v, u, assignment));
+      }
+      domainsAhead.put(v, prunedDomain);
     });
     return domainsAhead;
   }
@@ -54,10 +65,10 @@ public abstract class CSP<V extends Variable<?, U>, U extends Value<?>> {
     return assignment.size() == variables.size();
   }
 
-  protected V selectUnassigned(Map<V, U> assignment) {
+  protected V selectUnassigned(Map<V, U> assignment, Map<V, Set<U>> domains) {
     return variables.stream()
         .filter(v -> !assignment.containsKey(v))
-        .min(Comparator.comparingInt(o -> o.getInitialDomainValues().size()))
+        .min(Comparator.comparingInt(o -> domains.get(o).size()))
         .orElseThrow();
   }
 
