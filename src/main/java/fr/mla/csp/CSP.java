@@ -30,17 +30,16 @@ public abstract class CSP<V extends Variable<?, U>, U extends Value<?>> {
     for (U value : domains.get(variable)) {
       visitedNodes++;
       if (isConsistent(variable, value, assignment)) {
+        Map<V, Set<U>> prunedDomain = lookAhead(assignment, domains, variable, value);
+        log.info("Assignment {}", assignment);
+        log.info("Assigning {} := {}", variable, value);
+        log.info("Pruned Domain {}", prunedDomain);
+        if (anyDomainsEmpty(prunedDomain)) {
+          continue;
+        }
         assignment.put(variable, value);
         try {
-          Map<V, Set<U>> domainsLookAhead = lookAhead(assignment, domains, variable, value);
-//          log.info("Assignment {}", assignment);
-//          log.info("Assigning {} := {}", variable, value);
-//          log.info("Domain after {}", domainsLookAhead);
-          if (anyDomainsEmpty(domainsLookAhead)) {
-            continue;
-          }
-          return backtrackingSearch(assignment, domainsLookAhead);
-
+          return backtrackingSearch(assignment, prunedDomain);
         } catch (NoSolutionException e) {
           assignment.remove(variable);
         }
@@ -54,18 +53,18 @@ public abstract class CSP<V extends Variable<?, U>, U extends Value<?>> {
   }
 
   private Map<V, Set<U>> lookAhead(Map<V, U> assignment, Map<V, Set<U>> domains, V variable, U value) {
+    assignment.put(variable, value);
     Map<V, Set<U>> domainsAhead = new HashMap<>();
     domains.forEach((v, values) -> {
       Set<U> prunedDomain = new HashSet<>(values);
-      if (!assignment.containsKey(v)) {
-        if (v.get() == variable.get()) {
-          prunedDomain.removeIf(u -> !u.get().equals(value.get()));
-        } else {
-          prunedDomain.removeIf(u -> !isConsistent(v, u, assignment));
-        }
+      if (v.get() == variable.get()) {
+        prunedDomain.removeIf(u -> !u.get().equals(value.get()));
+      } else if (!assignment.containsKey(v)) {
+        prunedDomain.removeIf(u -> !isConsistent(v, u, assignment));
       }
       domainsAhead.put(v, prunedDomain);
     });
+    assignment.remove(variable);
     return domainsAhead;
   }
 
