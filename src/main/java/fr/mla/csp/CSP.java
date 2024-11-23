@@ -1,10 +1,6 @@
 package fr.mla.csp;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import fr.mla.NoSolutionException;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +23,14 @@ public abstract class CSP<V extends Variable<?, U>, U extends Value<?>> {
       return assignment;
     }
     V variable = selectUnassigned(assignment, domains);
-    for (U value : domains.get(variable)) {
+    for (U value : valueOrdering(assignment, domains, variable)) {
+//      for (U value : domains.get(variable)) {
       visitedNodes++;
       if (isConsistent(variable, value, assignment)) {
         Map<V, Set<U>> prunedDomain = lookAhead(assignment, domains, variable, value);
-        log.info("Assignment {}", assignment);
-        log.info("Assigning {} := {}", variable, value);
-        log.info("Pruned Domain {}", prunedDomain);
+//        log.info("Assignment {}", assignment);
+//        log.info("Assigning {} := {}", variable, value);
+//        log.info("Pruned Domain {}", prunedDomain);
         if (anyDomainsEmpty(prunedDomain)) {
           continue;
         }
@@ -46,6 +43,19 @@ public abstract class CSP<V extends Variable<?, U>, U extends Value<?>> {
       }
     }
     throw new NoSolutionException();
+  }
+
+  private List<U> valueOrdering(Map<V,U> assignment, Map<V, Set<U>> domains, V variable) {
+    Map<U, Integer> domainValueSizes = new HashMap<>();
+    for (U value : domains.get(variable)) {
+      Map<V, Set<U>> prunedDomain = lookAhead(assignment, domains, variable, value);
+      int size = prunedDomain.values().stream().map(Set::size).reduce(0, Integer::sum);
+      domainValueSizes.put(value, size);
+    }
+    List<U> orderedValues = domainValueSizes.entrySet().stream()
+            .sorted((o1, o2) -> o2.getValue().compareTo(o1.getValue()))
+            .map(Map.Entry::getKey).toList();
+    return orderedValues;
   }
 
   private boolean anyDomainsEmpty(Map<V, Set<U>> domains) {

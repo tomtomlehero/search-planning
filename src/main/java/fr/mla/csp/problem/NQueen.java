@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class NQueen extends CSP<NQueenVariable, NQueenValue> {
 
-  static final int N = 10;
+  static final int N = 50;
 
   public NQueen() {
     Set<NQueenVariable> variables = new HashSet<>();
